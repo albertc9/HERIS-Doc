@@ -68,7 +68,7 @@ Use the same variable pattern as the smoke script for a single test:
      PULP_OBJDUMP=riscv64-unknown-elf-objdump \
      PULP_ARCH_CFLAGS='-march=rv32imfc_xcorev -mabi=ilp32f -mno-pulp-hwloop' \
      PULP_ARCH_LDFLAGS='-march=rv32imfc_xcorev -mabi=ilp32f -mno-pulp-hwloop' \
-     VSIM_PATH=/home/work1/Works/heris/pulpissimo/build/questasim \
+     VSIM_PATH=/home/work1/Works/heris/heris-soc/build/questasim \
      VSIM=vsim
 
 Not every regression test is valid for the current single-core KCU105/CV32E40P
