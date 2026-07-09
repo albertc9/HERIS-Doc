@@ -33,11 +33,9 @@ added incrementally.
    :caption: Getting Started
 
    getting-started/overview
-   getting-started/clone-and-submodules
-   getting-started/toolchain-setup
-   getting-started/environment-check
+   getting-started/setup
    getting-started/first-smoke-test
-   getting-started/common-errors
+   getting-started/troubleshooting
 
 .. toctree::
    :maxdepth: 2
@@ -45,7 +43,7 @@ added incrementally.
 
    architecture/overview
    architecture/repository-layout
-   architecture/pulpissimo-integration
+   architecture/integration
    architecture/core-configuration
    architecture/memory-map
    architecture/clock-and-reset
