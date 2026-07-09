@@ -35,6 +35,29 @@ If the RISC-V tools are installed under ``/opt/riscv``, export:
    export PULP_RISCV_GCC_TOOLCHAIN=/opt/riscv
    export PATH=$PULP_RISCV_GCC_TOOLCHAIN/bin:$PATH
 
+The runtime ELF utilities also require Python ``pyelftools``. Check:
+
+.. code-block:: sh
+
+   python3 -c 'from elftools.elf.elffile import ELFFile'
+
+Wrong Runtime Target
+--------------------
+
+For this migrated repository, the CV32E40P smoke flow must use the repo-local
+runtime and the ``pulpissimo`` runtime target:
+
+.. code-block:: sh
+
+   cd heris-soc
+   ./run_cv32e40p_smoke.sh --print-env
+
+If a log shows ``chips/pulp/config.h`` or ``chips/pulp/link.ld``, the runtime
+target is wrong. Clear stale shell variables that point at the old
+``pulpissimo`` checkout, or rely on ``run_cv32e40p_smoke.sh`` to set
+``PULPRT_HOME``, ``PULP_SDK_HOME``, ``PULPRT_TARGET``, and
+``PULPRUN_TARGET``.
+
 Stale Simulator Build
 ---------------------
 
@@ -73,4 +96,3 @@ Generated Files
 
 Do not hand-edit generated ROM, padframe, or Bender output. Regenerate through
 the relevant make target, then review the generated diff.
-

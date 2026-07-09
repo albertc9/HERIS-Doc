@@ -33,6 +33,7 @@ The normal local flow expects:
 * Bender for RTL source-list generation and dependency resolution.
 * Bendis when dependency declarations need to be changed.
 * Xilinx Vivado for FPGA builds.
+* Python ``pyelftools`` for runtime ELF handling.
 
 Check the tool paths:
 
@@ -42,6 +43,7 @@ Check the tool paths:
    bender --version
    bendis --version
    /opt/riscv/bin/riscv64-unknown-elf-gcc --version
+   python3 -c 'from elftools.elf.elffile import ELFFile'
 
 Set the RISC-V toolchain path before running software tests:
 
@@ -66,4 +68,3 @@ targets instead of editing generated output by hand:
 
    cd heris-soc
    make hw
-
