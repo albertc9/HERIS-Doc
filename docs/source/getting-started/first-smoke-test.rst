@@ -8,14 +8,9 @@ From ``heris-soc``:
 
 .. code-block:: sh
 
-   make -C target/sim/questasim build \
-     PULPISSIMO_UTILS=/home/work1/.cargo/bin \
-     VSIM_BIN=vsim \
-     USE_VIPS=0 \
-     VOPT_ARGS='+acc -GCORE_TYPE=0 -GUSE_FPU=1 -GUSE_ZFINX=0'
+   make -C target/sim/questasim build
 
-This builds the QuestaSim platform under ``heris-soc/build/questasim``. The
-default daily build does not use optional peripheral VIP models.
+This builds the QuestaSim platform under ``heris-soc/build/questasim``.
 
 Run The CV32E40P Smoke
 ----------------------
