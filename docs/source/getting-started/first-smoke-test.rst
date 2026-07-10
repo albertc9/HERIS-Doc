@@ -105,3 +105,5 @@ The smoke uses ``fast_debug`` hierarchy preload. It does not prove:
 * QSPI boot.
 * External peripheral behavior or tests that require optional VIP models.
 * Regression tests outside the listed bounded set.
+
+However, this at least shows that you can move forward. 

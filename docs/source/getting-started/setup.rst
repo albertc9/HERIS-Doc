@@ -31,6 +31,7 @@ The CV32E40P smoke flow expects a Linux environment with:
 * A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See the
   `HERIS toolchain guide <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`_.
 * `Bender <https://github.com/pulp-platform/bender>`_.
+* `Bendis <https://crates.io/crates/bendis>`_.
 * Python ``pyelftools`` for runtime ELF handling.
 * GNU ``timeout`` and ``setsid``, used to bound simulation runs.
 
@@ -59,13 +60,6 @@ If the RISC-V tools are installed outside the current ``PATH``, add their
 Do not globally export HERIS-internal variables such as ``PULP_ARCH_CFLAGS``
 or ``VSIM_PATH``. The repository test scripts select the CV32E40P ISA, ABI,
 runtime target, and simulator build path.
-
-Optional Tools
---------------
-
-`Bendis <https://crates.io/crates/bendis>`_ is needed only when dependency
-declarations change. Xilinx Vivado is needed only for FPGA builds; use the
-version specified by the FPGA-flow documentation.
 
 Dependency Rules
 ----------------
