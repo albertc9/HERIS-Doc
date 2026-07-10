@@ -22,17 +22,17 @@ The ``heris-soc`` tree also contains submodules, including the runtime and
 regression tests. Keep submodule changes explicit: commit inside the submodule
 first, then commit the updated pointer in the parent repository.
 
-Required Tools
---------------
+Required Tools and Environments
+---------------------------------
 
 The normal local flow expects:
 
-* Siemens QuestaSim, available as ``vsim``.
-* A RISC-V GCC toolchain. The current local convention is ``/opt/riscv`` with
+* Siemens QuestaSim, available as ``vsim``. Ask maintainer about how to install it. 
+* A RISC-V GCC toolchain, as the guided `here <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`. The current local convention is ``/opt/riscv`` with
   ``riscv64-unknown-elf-*`` tools.
-* Bender for RTL source-list generation and dependency resolution.
-* Bendis when dependency declarations need to be changed.
-* Xilinx Vivado for FPGA builds.
+* `Bender <https://github.com/pulp-platform/bender>`.
+* `Bendis <https://crates.io/crates/bendis>`.
+* Xilinx Vivado (recommend to use 2023).
 * Python ``pyelftools`` for runtime ELF handling.
 
 Check the tool paths:
@@ -58,7 +58,7 @@ Dependency Rules
 Do not edit generated dependency checkouts under ``heris-soc/.bender/``.
 Normal builds call Bender internally.
 
-Use Bendis only when dependency declarations change. Ordinary RTL, simulation,
+Use Bendis only when dependency declarations change, including new version released. Ordinary RTL, simulation,
 software, board-target, and documentation changes do not require Bendis.
 
 Generated files are part of the hardware flow. Regenerate them through make
