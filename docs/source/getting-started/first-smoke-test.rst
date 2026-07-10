@@ -1,115 +1,107 @@
 First Smoke Test
 ================
 
-Build The Simulator
--------------------
-
-From ``heris-soc``:
-
-.. code-block:: sh
-
-   make -C target/sim/questasim build
-
-This builds the QuestaSim platform under ``heris-soc/build/questasim``.
-
 Run The CV32E40P Smoke
 ----------------------
 
-From ``heris-soc``:
+From the top-level HERIS checkout:
 
 .. code-block:: sh
 
-   ./run_cv32e40p_smoke.sh
+   cd heris-soc
+   make smoke
 
-Use ``--rebuild`` when the optimized simulator should be rebuilt:
+This is the normal first validation command. It checks the required tools,
+builds or reuses the QuestaSim model under ``build/questasim``, and runs the
+bounded CV32E40P software smoke set.
 
-.. code-block:: sh
+The current smoke profile is fixed to:
 
-   ./run_cv32e40p_smoke.sh --rebuild
+* ``CORE_TYPE=0``: CV32E40P.
+* ``USE_FPU=1``: single-precision floating-point support enabled.
+* ``USE_ZFINX=0``: a separate floating-point register file and ``ilp32f`` ABI.
+* ``USE_VIPS=0``: optional peripheral VIP models disabled.
+* ``bootmode=fast_debug``: testbench hierarchy preload for fast simulation.
 
-The smoke script checks the environment, builds or reuses the QuestaSim
-platform, and runs a bounded set of software tests:
+The smoke set contains:
 
 * ``hello``
 * ``fpu_smoke``
-* ``riscv_tests/testALU``
-* ``riscv_tests/testMUL``
-* ``riscv_tests/testMisaligned``
-* ``peripherals/uart``
-* ``sequential_bare_tests/fibonacci``
-* ``sequential_bare_tests/bubblesort``
-* ``sequential_bare_tests/crc32``
+* ``testALU``
+* ``testMUL``
+* ``testMisaligned``
+* ``uart``
+* ``fibonacci``
+* ``bubblesort``
+* ``crc32``
 
-The script pins ``PULPRT_HOME`` and ``PULP_SDK_HOME`` to the repo-local
-``sw/pulp-runtime`` tree and uses ``PULPRT_TARGET=pulpissimo`` and
-``PULPRUN_TARGET=pulpissimo``. The ``pulpissimo`` runtime target name is
-intentional for this migrated repository.
+The platform build plus these nine tests produce the expected final summary:
 
-To inspect the effective smoke environment without running the tests:
+.. code-block:: text
 
-.. code-block:: sh
-
-   ./run_cv32e40p_smoke.sh --print-env
+   Results: 10 passed, 0 failed
+   SMOKE PASSED
 
 Logs are written under ``heris-soc/notes/logs/``.
 
-The current Ubuntu validation run passed the full bounded smoke set with
-``Results: 10 passed, 0 failed``. The smoke path uses the short CRC32 setting
-from the script, ``CRC32_REPEAT_FACTOR=32``.
+Rebuild The Simulation Model
+----------------------------
 
-KCU105 Bitstream Check
----------------------
-
-From ``heris-soc``:
+The normal command reuses a cached ``vopt_tb`` when its profile matches. Force
+RTL recompilation after changing RTL, the testbench, Bender source dependencies,
+or the core/FPU/Zfinx configuration:
 
 .. code-block:: sh
 
-   make kcu105
+   make smoke REBUILD=1
 
-The expected top-level outputs are ``target/fpga/kcu105.bit`` and
-``target/fpga/kcu105.bin``. In the current validation run, Vivado completed
-``write_bitstream`` successfully, met timing with ``WNS=2.060 ns`` and
-``WHS=0.030 ns``, and reported ``0 Errors`` at bitstream DRC.
+Changing only a C regression test does not require ``REBUILD=1``. The test's
+``clean all run`` flow recompiles the software and loads it into the existing
+simulation model.
 
 Run One Test
 ------------
 
-Use the same variable pattern as the smoke script for a single test:
+List the supported short names and run one test with the same CV32E40P profile:
 
 .. code-block:: sh
 
-   PULPRT_HOME=$PWD/sw/pulp-runtime \
-   PULP_SDK_HOME=$PWD/sw/pulp-runtime \
-   PULPRT_TARGET=pulpissimo \
-   PULPRUN_TARGET=pulpissimo \
-   make -C sw/regression_tests/hello clean all run \
-     USE_CV32E40P=1 \
-     platform=rtl \
-     runtime_platform=fpga \
-     bootmode=fast_debug \
-     CONFIG_IO_UART=0 \
-     CONFIG_PLUSARG_SIM=1 \
-     PULP_RISCV_GCC_TOOLCHAIN=/opt/riscv \
-     PULP_CC=riscv64-unknown-elf-gcc \
-     PULP_LD=riscv64-unknown-elf-gcc \
-     PULP_AR=riscv64-unknown-elf-ar \
-     PULP_OBJDUMP=riscv64-unknown-elf-objdump \
-     PULP_ARCH_CFLAGS='-march=rv32imfc_xcorev -mabi=ilp32f -mno-pulp-hwloop' \
-     PULP_ARCH_LDFLAGS='-march=rv32imfc_xcorev -mabi=ilp32f -mno-pulp-hwloop' \
-     VSIM_PATH=/home/work1/Works/heris/heris-soc/build/questasim \
-     VSIM=vsim
+   make test-list
+   make test TEST=hello
 
-Not every regression test is valid for the current single-core KCU105/CV32E40P
-configuration. Cluster-oriented tests and tests that require peripheral VIPs
-need separate setup.
+Use ``REBUILD=1`` only when the hardware simulation model also needs to be
+rebuilt:
 
-What The Smoke Does Not Prove
------------------------------
+.. code-block:: sh
 
-The smoke script uses ``fast_debug`` preloading. It verifies a useful
-RTL/runtime path, but it does not prove:
+   make test TEST=hello REBUILD=1
+
+Inspect The Effective Configuration
+-----------------------------------
+
+The test scripts own the compiler names, ISA and ABI flags, runtime target, and
+simulator path. Inspect their effective values without building or running a
+test:
+
+.. code-block:: sh
+
+   make test-env
+
+The runtime included with HERIS still calls its compatible SoC target
+``pulpissimo``. This is an internal compatibility identifier; it does not run
+the separate legacy ``pulpissimo`` checkout.
+
+What The Smoke Proves
+---------------------
+
+Passing the smoke test shows that the CV32E40P, FPU, basic memory and bus path,
+runtime, software toolchain, QuestaSim model, and selected UART path work
+together for the covered cases.
+
+The smoke uses ``fast_debug`` hierarchy preload. It does not prove:
 
 * OpenOCD or GDB loading through RISC-V debug JTAG.
-* physical KCU105 boot.
+* Physical KCU105 boot or FPGA timing closure.
 * QSPI boot.
-* external peripheral behavior.
+* External peripheral behavior or tests that require optional VIP models.
+* Regression tests outside the listed bounded set.

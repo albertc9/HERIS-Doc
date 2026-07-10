@@ -20,20 +20,25 @@ If a submodule itself has local work, inspect it before changing pointers:
 Tool Not Found
 --------------
 
-The smoke script expects ``vsim`` and ``riscv64-unknown-elf-gcc`` on ``PATH``.
-Check:
+The smoke script expects Bender, QuestaSim, GNU process-control tools, and the
+RISC-V compiler utilities on ``PATH``. Check:
 
 .. code-block:: sh
 
+   command -v bender
    command -v vsim
    command -v riscv64-unknown-elf-gcc
+   command -v riscv64-unknown-elf-ar
+   command -v riscv64-unknown-elf-objdump
+   command -v timeout
+   command -v setsid
 
-If the RISC-V tools are installed under ``/opt/riscv``, export:
+If the RISC-V tools are installed outside the current ``PATH``, add their
+``bin`` directory:
 
 .. code-block:: sh
 
-   export PULP_RISCV_GCC_TOOLCHAIN=/opt/riscv
-   export PATH=$PULP_RISCV_GCC_TOOLCHAIN/bin:$PATH
+   export PATH=/path/to/riscv-toolchain/bin:$PATH
 
 The runtime ELF utilities also require Python ``pyelftools``. Check:
 
@@ -50,11 +55,11 @@ runtime and the ``pulpissimo`` runtime target:
 .. code-block:: sh
 
    cd heris-soc
-   ./run_cv32e40p_smoke.sh --print-env
+   make test-env
 
 If a log shows ``chips/pulp/config.h`` or ``chips/pulp/link.ld``, the runtime
 target is wrong. Clear stale shell variables that point at the old
-``pulpissimo`` checkout, or rely on ``run_cv32e40p_smoke.sh`` to set
+``pulpissimo`` checkout, or rely on the test scripts to set
 ``PULPRT_HOME``, ``PULP_SDK_HOME``, ``PULPRT_TARGET``, and
 ``PULPRUN_TARGET``.
 
@@ -66,7 +71,7 @@ If the simulator was built for a different core configuration, force a rebuild:
 .. code-block:: sh
 
    cd heris-soc
-   ./run_cv32e40p_smoke.sh --rebuild
+   make smoke REBUILD=1
 
 The expected current build configuration is:
 
@@ -80,8 +85,7 @@ Wrong Test For The Configuration
 
 Some tests assume XPULP-only instructions, cluster features, external VIPs, or
 peripheral models that are not part of the default smoke path. Start from
-``hello``, ``fpu_smoke``, UART, and the integer tests listed in the smoke
-script before debugging larger regressions.
+the tests returned by ``make test-list`` before debugging larger regressions.
 
 FPGA Build Used Too Early
 -------------------------
