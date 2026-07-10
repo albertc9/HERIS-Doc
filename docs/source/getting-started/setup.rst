@@ -28,10 +28,10 @@ Required Tools and Environments
 The normal local flow expects:
 
 * Siemens QuestaSim, available as ``vsim``. Ask maintainer about how to install it. 
-* A RISC-V GCC toolchain, as the guided `here <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`. The current local convention is ``/opt/riscv`` with
+* A RISC-V GCC toolchain, as the guided `here <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`_. The current local convention is ``/opt/riscv`` with
   ``riscv64-unknown-elf-*`` tools.
-* `Bender <https://github.com/pulp-platform/bender>`.
-* `Bendis <https://crates.io/crates/bendis>`.
+* `Bender <https://github.com/pulp-platform/bender>`_.
+* `Bendis <https://crates.io/crates/bendis>`_.
 * Xilinx Vivado (recommend to use 2023).
 * Python ``pyelftools`` for runtime ELF handling.
 
