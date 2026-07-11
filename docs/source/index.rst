@@ -36,6 +36,14 @@ added incrementally.
    getting-started/setup
    getting-started/first-smoke-test
    getting-started/troubleshooting
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Bendis
+
+   bendis/bendis-for-development
+   bendis/bendis-for-hardening
+   bendis/bendis-install
 
 .. toctree::
    :maxdepth: 2

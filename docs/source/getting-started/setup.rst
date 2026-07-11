@@ -31,7 +31,7 @@ The CV32E40P smoke flow expects a Linux environment with:
 * A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See the
   `HERIS toolchain guide <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`_.
 * `Bender <https://github.com/pulp-platform/bender>`_.
-* `Bendis <https://crates.io/crates/bendis>`_.
+* `Bendis <https://crates.io/crates/bendis>`_. You may follow `here <https://heris-doc.readthedocs.io/en/latest/getting-started/overview.html>`_ to install it.
 * Python ``pyelftools`` for runtime ELF handling.
 * GNU ``timeout`` and ``setsid``, used to bound simulation runs.
 
