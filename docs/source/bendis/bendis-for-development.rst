@@ -168,7 +168,7 @@ project structure will look similar to this.
         described in step 12.
 
 Daily Development Workflow
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 During normal development, follow these steps:
 
@@ -225,7 +225,7 @@ Inheriting Sub-modules in HERIS-platform
 4. Continue development as described in the previous section.
 
 Tagging and Release
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 1. When your module is ready for release, create a Git tag. Tags are the primary
    mechanism used by Bendis to manage module versions.
