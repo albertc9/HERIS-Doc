@@ -167,8 +167,37 @@ project structure will look similar to this.
       * If the dependency source set changed, regenerate ``compiles.tcl`` as
         described in step 12.
 
+Tagging and Release
+~~~~~~~~~~~~~~~~~~~~~~
+
+1. When your module is ready for release, create a Git tag. Tags are the primary
+   mechanism used by Bendis to manage module versions.
+
+2. Read the
+   `GitLab tagging documentation <https://docs.gitlab.com/user/project/repository/tags/>`_
+   for more information.
+
+3. Name tags using the format ``vX.Y.Z``, where ``X``, ``Y``, and ``Z`` are
+   integers. Examples include:
+
+   * ``v0.1.0``
+   * ``v1.0.0``
+   * ``v2.3.4``
+
+   A tag is a snapshot of a specific version of the module. A parent module can
+   use the tag to refer to that exact version.
+
+4. A Git tag is required. For a major version, you may also create a release on
+   the GitLab Releases page.
+
+   A tag is sufficient and is the mechanism used by Bendis to identify module
+   versions. A GitLab release provides a more formal way to publish the module.
+
 Daily Development Workflow
 ----------------------------
+
+Bendis for Everyday
+~~~~~~~~~~~~~~~~~~~~
 
 During normal development, follow these steps:
 
@@ -224,28 +253,3 @@ Inheriting Sub-modules in HERIS-platform
 
 4. Continue development as described in the previous section.
 
-Tagging and Release
----------------------
-
-1. When your module is ready for release, create a Git tag. Tags are the primary
-   mechanism used by Bendis to manage module versions.
-
-2. Read the
-   `GitLab tagging documentation <https://docs.gitlab.com/user/project/repository/tags/>`_
-   for more information.
-
-3. Name tags using the format ``vX.Y.Z``, where ``X``, ``Y``, and ``Z`` are
-   integers. Examples include:
-
-   * ``v0.1.0``
-   * ``v1.0.0``
-   * ``v2.3.4``
-
-   A tag is a snapshot of a specific version of the module. A parent module can
-   use the tag to refer to that exact version.
-
-4. A Git tag is required. For a major version, you may also create a release on
-   the GitLab Releases page.
-
-   A tag is sufficient and is the mechanism used by Bendis to identify module
-   versions. A GitLab release provides a more formal way to publish the module.
