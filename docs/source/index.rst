@@ -41,9 +41,9 @@ added incrementally.
    :maxdepth: 2
    :caption: Bendis
 
+   bendis/bendis-install
    bendis/bendis-for-development
    bendis/bendis-for-hardening
-   bendis/bendis-install
 
 .. toctree::
    :maxdepth: 2
