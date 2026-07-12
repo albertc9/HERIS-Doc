@@ -26,6 +26,14 @@ For some Ubuntu Dist, the pre-installed rust and cargo versions tends to very ol
     curl https://sh.rustup.rs -sSf | sh
     source $HOME/.cargo/env
 
+Also cmake: 
+
+.. code-block:: sh
+
+    sudo apt install -y ca-certificates gpg wget
+    wget -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc | sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/kitware.list
+    sudo apt update && sudo apt install cmake
 
 And repeat the installation step again.
 
