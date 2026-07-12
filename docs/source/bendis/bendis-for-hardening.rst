@@ -18,7 +18,7 @@ Use this workflow when testing:
 Requirements
 ------------
 
-1. Install Bendis 0.5.0 or later and a Bender version that supports
+1. Install Bendis 0.5.1 or later and a Bender version that supports
    ``bender script template-json``.
 
 2. Place the AegisRTL repository next to the project root. For HERIS, the
