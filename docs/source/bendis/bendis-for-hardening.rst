@@ -13,7 +13,7 @@ Use this workflow when testing:
 
 .. important::
 
-   Always run ``bendis update --hard`` from the project root directory.
+   Always run ``bendis update --hard`` from the project root directory ``heris/heris-soc``.
 
 Requirements
 ------------
@@ -44,11 +44,7 @@ Run the following command from ``heris-soc/``:
 
 Bendis first performs the normal dependency update. It then prepares a clean
 working copy under ``../aegisrtl/``, collects the RTL used by simulation and
-KCU105 builds, and runs:
-
-.. code-block:: zsh
-
-   aegisrtl/scripts/harden.sh .aegis/effective-rtl.json
+KCU105 builds, and runs ``aegisrtl/scripts/harden.sh .aegis/effective-rtl.json``.
 
 The script runs with ``aegisrtl/`` as its working directory. It may modify RTL
 files listed as hardening candidates directly in place. It must not rename or
@@ -59,7 +55,7 @@ skipped and continues with an unmodified local RTL copy.
 
 After the command finishes, ``heris-soc/Bender.yml`` and
 ``heris-soc/.bender.yml`` point to RTL under ``../aegisrtl/``. Normal HERIS
-commands then use this local RTL. For example:
+commands then use this local RTL after hardening. For example:
 
 .. code-block:: zsh
 
@@ -91,11 +87,11 @@ from ``heris-soc/``:
 
    bendis update
 
-This restores the standard IHEP dependency configuration. It does not delete
+This restores the standard configuration. It does not delete
 the generated AegisRTL working data.
 
 .. warning::
 
-   Do not edit the generated ``Bender.yml`` or ``.bender.yml`` in
+   Do not edit the generated ``Bender.yml`` or ``.bender.yml`` right under
    ``heris-soc/`` or ``aegisrtl/``. Edit the source configuration under
    ``heris-soc/bendis_workspace/`` and run Bendis again.
