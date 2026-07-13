@@ -18,7 +18,7 @@ Use this workflow when testing:
 Requirements
 ------------
 
-1. Install Bendis 0.5.5 or later and a Bender version that supports
+1. Install Bendis 0.5.12 or later and a Bender version that supports
    ``bender script template-json``.
 
 2. Place the AegisRTL repository next to the project root. For HERIS, the
@@ -42,9 +42,10 @@ Run the following command from ``heris-soc/``:
 
    bendis update --hard
 
-Bendis first performs the normal dependency update. It then prepares a clean
-working copy under ``../aegisrtl/``, collects the RTL used by simulation and
-KCU105 builds, and runs ``aegisrtl/scripts/harden.sh .aegis/effective-rtl.json``.
+Bendis first performs the normal dependency update. It then refreshes the
+generated working data under ``../aegisrtl/``, reuses available Bender Git
+data, collects the RTL used by simulation and KCU105 builds, and runs
+``aegisrtl/scripts/harden.sh .aegis/effective-rtl.json``.
 
 The script runs with ``aegisrtl/`` as its working directory. It may modify RTL
 files listed as hardening candidates directly in place. It must not rename or
@@ -76,6 +77,10 @@ Bendis writes hardening information under ``aegisrtl/.aegis/``:
 
 These files, downloaded dependencies, and copied project files under
 ``aegisrtl/`` are generated working data and are ignored by Git.
+
+After a successful run, Bendis removes numbered conflict copies of generated
+Bender configuration and lock files. It does not remove editable conflict
+copies under ``heris-soc/bendis_workspace/``.
 
 Returning to Normal Development
 -------------------------------

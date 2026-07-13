@@ -1,47 +1,33 @@
 Bendis Installation
----------------------
+===================
 
-1. Install Rust:
-
-.. code-block:: sh
-
-    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-
-2. You can then build and install Bender and Bendis for the current user with the following command:
+1. Install Bender with its recommended installer:
 
 .. code-block:: sh
 
-    sudo apt update
-    sudo apt install cargo
-    cargo install bender
-    cargo install bendis
+   curl --proto '=https' --tlsv1.2 https://pulp-platform.github.io/bender/init -sSf | sh
 
-Note that don't use ``sudo`` with ``cargo install``, as it installs to the home directory of the user.
-
-For some Ubuntu Dist, the pre-installed rust and cargo versions tends to very old. You may need to update them first:
+2. Install Rust for the current user, then install Bendis:
 
 .. code-block:: sh
 
-    sudo apt remove rustc cargo
-    curl https://sh.rustup.rs -sSf | sh
-    source $HOME/.cargo/env
+   curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+   source "$HOME/.cargo/env"
+   cargo install bendis
 
-Also cmake: 
+Do not use ``sudo`` with ``cargo install``. The executable is installed for
+the current user under ``~/.cargo/bin``.
 
-.. code-block:: sh
-
-    sudo apt install -y ca-certificates gpg wget
-    wget -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc | sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/kitware.list
-    sudo apt update && sudo apt install cmake
-
-And repeat the installation step again.
-
-3. Verify installation:
+If ``~/.cargo/bin`` is not already on ``PATH``, add it for the current shell:
 
 .. code-block:: sh
 
-    bender --version
-    bendis --version
+   export PATH="$HOME/.cargo/bin:$PATH"
 
+3. Verify both tools:
+
+.. code-block:: sh
+
+   bender --version
+   bendis --version
 
