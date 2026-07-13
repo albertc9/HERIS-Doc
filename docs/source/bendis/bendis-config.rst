@@ -46,29 +46,6 @@ The ``first_run`` and ``version`` fields are internal state used for the
 welcome message and version-change notice. They normally do not need manual
 changes.
 
-Update Behavior
----------------
-
-``bendis update`` performs the following operations:
-
-1. Detect local ``path`` dependencies in ``bendis_workspace/Bender.yml`` and
-   ``bendis_workspace/.bender.yml``. Their top-level directories are copied
-   from the project root into the workspace. If no ``path`` dependency is found,
-   Bendis uses ``hw/`` and ``target/``.
-2. Run ``bender update`` in ``bendis_workspace/``. This is the dependency
-   version-resolution step.
-3. Convert matching PULP Platform GitHub sources to the IHEP mirrors and write
-   the generated ``Bender.yml``, ``.bender.yml``, and exact ``Bender.lock`` to
-   the project root.
-4. Materialize the root checkout from local Bender data. Remote access is used
-   only when the local checkout cannot be completed.
-5. Verify the generated files and remove numbered conflict copies of generated
-   Bender files. Possible conflict copies of editable workspace configuration
-   are reported but not removed.
-
-Keep ``storage_saving_mode = 0`` for normal development. Enable it only when
-disk usage is more important than reusing the workspace cache.
-
 Editable and Generated Files
 ----------------------------
 
