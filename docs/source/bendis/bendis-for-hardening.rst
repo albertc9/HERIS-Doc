@@ -100,3 +100,27 @@ the generated AegisRTL working data.
    Do not edit the generated ``Bender.yml`` or ``.bender.yml`` right under
    ``heris-soc/`` or ``aegisrtl/``. Edit the source configuration under
    ``heris-soc/bendis_workspace/`` and run Bendis again.
+
+AegisRTL Developer Interface
+----------------------------
+
+AegisRTL must provide an executable script at ``scripts/harden.sh``. Bendis
+runs it from the AegisRTL root as:
+
+.. code-block:: sh
+
+   scripts/harden.sh .aegis/effective-rtl.json
+
+The JSON file contains an ``inputs`` array. Each entry has:
+
+* ``path``: file path relative to the AegisRTL root.
+* ``role``: ``design``, ``testbench``, ``script``, or ``collateral``.
+* ``candidate``: whether the file may be modified by the hardening tool.
+
+The script may modify files with ``candidate: true`` directly in place. It
+must keep those paths present and must not modify package ``Bender.yml`` files.
+Treat entries with ``candidate: false`` as read-only compilation context.
+
+Exit with status ``0`` on success. Any nonzero status aborts hard mode. No
+output directory, result file, or completion message is required; Bendis
+detects changed candidate files and writes ``.aegis/hardening-result.json``.
