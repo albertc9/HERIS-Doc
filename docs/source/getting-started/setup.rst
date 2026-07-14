@@ -64,6 +64,8 @@ Get the sources in a separate working directory (e.g. ~/Downloads), not inside t
 
 .. code-block:: sh
 
+   mkdir -p ~/src
+   cd ~/src
    git clone --recursive git@code.ihep.ac.cn:heris/heris-platform/riscv-gnu-toolchain.git
    cd riscv-gnu-toolchain
 
@@ -82,6 +84,9 @@ normal user account, use a new directory under ``$HOME``:
    export HERIS_RISCV_TOOLCHAIN=$HOME/tools/heris-riscv
    mkdir -p "$HERIS_RISCV_TOOLCHAIN"
    export PATH=$HERIS_RISCV_TOOLCHAIN/bin:$PATH
+
+Add the ``PATH`` line to your shell startup file if you need the toolchain in
+new terminals.
 
 If you prefer an install path under ``/opt``, create an empty directory there
 with administrator permissions and make it writable before running
