@@ -39,10 +39,10 @@ HERIS development expects a Linux environment with:
 RISC-V Toolchain
 ----------------
 
-Use the HERIS GCC11 PULP RISC-V GNU toolchain for the current CV32E40P target.
-It is built for the ``xpulpv3`` extension set.
+The HERIS software flow uses the PULP RISC-V GNU/Newlib cross compiler. Build
+it from the HERIS toolchain repository with submodules enabled.
 
-Install the build dependencies on Ubuntu:
+Install the build dependencies first. On Ubuntu:
 
 .. code-block:: sh
 
@@ -50,27 +50,62 @@ Install the build dependencies on Ubuntu:
      libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex \
      texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
 
-Build and install the Newlib toolchain:
+On Fedora, CentOS, or RHEL:
+
+.. code-block:: sh
+
+   sudo yum install autoconf automake python3 libmpc-devel mpfr-devel \
+     gmp-devel gawk bison flex texinfo patchutils gcc gcc-c++ \
+     zlib-devel expat-devel
+
+Get the sources:
 
 .. code-block:: sh
 
    git clone --recursive git@code.ihep.ac.cn:heris/heris-platform/riscv-gnu-toolchain.git
    cd riscv-gnu-toolchain
-   ./configure --prefix=/opt/heris-riscv --with-arch=rv32imfcxpulpv3 --with-abi=ilp32 --enable-multilib
-   make -j$(nproc)
 
-Use an empty install prefix. Reusing a prefix from another RISC-V toolchain can
-mix incompatible libraries.
-
-Add the installed tools to ``PATH``:
+If the repository was cloned without submodules:
 
 .. code-block:: sh
 
-   export PATH=/opt/heris-riscv/bin:$PATH
+   git submodule update --init --recursive
+
+Choose an empty install prefix. Use a writable path unless you intend to install
+under ``/opt`` with administrator permissions:
+
+.. code-block:: sh
+
+   export RISCV=$HOME/tools/heris-riscv
+   mkdir -p "$RISCV"
+   export PATH=$RISCV/bin:$PATH
+
+Configure and build the Newlib toolchain:
+
+.. code-block:: sh
+
+   ./configure --prefix="$RISCV" --with-arch=rv32imfcxpulpv3 --with-abi=ilp32 --enable-multilib
+   make -j$(nproc)
+
+The build downloads upstream sources, patches them, and installs the toolchain
+under ``$RISCV``. Reserve several GiB of disk space.
+
+Check that the compiler is visible:
+
+.. code-block:: sh
+
+   command -v riscv64-unknown-elf-gcc
+   riscv64-unknown-elf-gcc --target=help
+
+Use a fresh prefix when rebuilding with a different ``--with-arch`` or
+``--with-abi``. Reusing a prefix from another Newlib toolchain can leave
+incompatible libraries in place.
 
 Do not globally export HERIS-internal variables such as ``PULP_ARCH_CFLAGS``
 or ``VSIM_PATH``. The repository test scripts select the CV32E40P ISA, ABI,
 runtime target, and simulator build path.
+
+See more details `here <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain/-/blob/master/README.md>`_.
 
 Environment Check
 -----------------
