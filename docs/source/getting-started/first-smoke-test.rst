@@ -1,6 +1,9 @@
 First Smoke Test
 ================
 
+After setup, run the first validation commands from ``heris-soc``. Start with
+the CV32E40P RTL smoke. Then run the KCU105 FPGA build.
+
 Run The CV32E40P Smoke
 ----------------------
 
@@ -106,4 +109,25 @@ The smoke uses ``fast_debug`` hierarchy preload. It does not prove:
 * External peripheral behavior or tests that require optional VIP models.
 * Regression tests outside the listed bounded set.
 
-However, this at least shows that you can move forward. 
+Build The KCU105 FPGA Target
+----------------------------
+
+Run the KCU105 FPGA build from ``heris-soc``:
+
+.. code-block:: sh
+
+   make kcu105
+
+If Vivado is not available as ``vivado``, pass the command explicitly:
+
+.. code-block:: sh
+
+   make kcu105 VIVADO='vitis vivado'
+
+The build produces:
+
+* ``target/fpga/kcu105.bit``
+* ``target/fpga/kcu105.bin``
+
+This checks the Vivado FPGA flow. It does not program the board or prove
+physical boot. However, this at least shows that you can move forward.

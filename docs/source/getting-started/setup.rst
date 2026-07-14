@@ -27,16 +27,55 @@ Required Tools
 
 HERIS development expects a Linux environment with:
 
-* Siemens QuestaSim, available as ``vsim``.
-* A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See the
-  `HERIS toolchain guide <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`_.
+* Siemens QuestaSim, available as ``vsim``. Ask maintainers for it.
+* Xilinx Vivado v2023.2. Ask maintainers for the license. 
+* A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See below.
 * `Bendis <https://crates.io/crates/bendis>`_. See
   :doc:`/bendis/bendis-install`.
 * `Bender <https://github.com/pulp-platform/bender>`_ by ``cargo install bender``.
 * Python ``pyelftools`` for runtime ELF handling.
 * GNU ``timeout`` and ``setsid``, by ``sudo apt install -y coreutils util-linux``.
 
-Put the toolchain and QuestaSim executables on ``PATH``. Check the
+RISC-V Toolchain
+----------------
+
+Use the HERIS GCC11 PULP RISC-V GNU toolchain for the current CV32E40P target.
+It is built for the ``xpulpv3`` extension set.
+
+Install the build dependencies on Ubuntu:
+
+.. code-block:: sh
+
+   sudo apt-get install autoconf automake autotools-dev curl python3 \
+     libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex \
+     texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
+
+Build and install the Newlib toolchain:
+
+.. code-block:: sh
+
+   git clone --recursive git@code.ihep.ac.cn:heris/heris-platform/riscv-gnu-toolchain.git
+   cd riscv-gnu-toolchain
+   ./configure --prefix=/opt/heris-riscv --with-arch=rv32imfcxpulpv3 --with-abi=ilp32 --enable-multilib
+   make -j$(nproc)
+
+Use an empty install prefix. Reusing a prefix from another RISC-V toolchain can
+mix incompatible libraries.
+
+Add the installed tools to ``PATH``:
+
+.. code-block:: sh
+
+   export PATH=/opt/heris-riscv/bin:$PATH
+
+Do not globally export HERIS-internal variables such as ``PULP_ARCH_CFLAGS``
+or ``VSIM_PATH``. The repository test scripts select the CV32E40P ISA, ABI,
+runtime target, and simulator build path.
+
+Environment Check
+-----------------
+
+Put the toolchain, QuestaSim, and Vivado executables on ``PATH``. Check the
 setup with:
 
 .. code-block:: sh
@@ -44,6 +83,7 @@ setup with:
    command -v bendis
    command -v bender
    command -v vsim
+   command -v vivado
    command -v riscv64-unknown-elf-gcc
    command -v riscv64-unknown-elf-ar
    command -v riscv64-unknown-elf-objdump
@@ -56,17 +96,6 @@ If ``pyelftools`` is missing, install it for the Python used above:
 .. code-block:: sh
 
    python3 -m pip install --user pyelftools
-
-If the RISC-V tools are installed outside the current ``PATH``, add their
-``bin`` directory. For example:
-
-.. code-block:: sh
-
-   export PATH=/path/to/riscv-toolchain/bin:$PATH
-
-Do not globally export HERIS-internal variables such as ``PULP_ARCH_CFLAGS``
-or ``VSIM_PATH``. The repository test scripts select the CV32E40P ISA, ABI,
-runtime target, and simulator build path.
 
 Dependency Rules
 ----------------
@@ -84,13 +113,3 @@ targets instead of editing generated output by hand:
 
    cd heris-soc
    make hw
-
-Setup Complete
---------------
-
-After the environment is configured, the first checks are:
-
-.. code-block:: sh
-
-   cd heris-soc
-   make test-env
