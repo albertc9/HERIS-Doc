@@ -25,22 +25,23 @@ first, then commit the updated pointer in the parent repository.
 Required Tools
 --------------
 
-The CV32E40P smoke flow expects a Linux environment with:
+HERIS development expects a Linux environment with:
 
 * Siemens QuestaSim, available as ``vsim``.
 * A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See the
   `HERIS toolchain guide <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain>`_.
-* `Bender <https://github.com/pulp-platform/bender>`_.
-* `Bendis <https://crates.io/crates/bendis>`_. You may follow `here <https://heris-doc.readthedocs.io/en/latest/getting-started/overview.html>`_ to install it.
+* `Bendis <https://crates.io/crates/bendis>`_. See
+  :doc:`/bendis/bendis-install`.
+* `Bender <https://github.com/pulp-platform/bender>`_ by ``cargo install bender``.
 * Python ``pyelftools`` for runtime ELF handling.
-* GNU ``timeout`` and ``setsid``, used to bound simulation runs.
+* GNU ``timeout`` and ``setsid``, by ``sudo apt install -y coreutils util-linux``.
 
-Put the toolchain, Bender, and QuestaSim executables on ``PATH``. Their install
-directories do not need to match another developer's machine. Check the smoke
-prerequisites with:
+Put the toolchain and QuestaSim executables on ``PATH``. Check the
+setup with:
 
 .. code-block:: sh
 
+   command -v bendis
    command -v bender
    command -v vsim
    command -v riscv64-unknown-elf-gcc
@@ -49,6 +50,12 @@ prerequisites with:
    command -v timeout
    command -v setsid
    python3 -c 'from elftools.elf.elffile import ELFFile'
+
+If ``pyelftools`` is missing, install it for the Python used above:
+
+.. code-block:: sh
+
+   python3 -m pip install --user pyelftools
 
 If the RISC-V tools are installed outside the current ``PATH``, add their
 ``bin`` directory. For example:
@@ -64,12 +71,11 @@ runtime target, and simulator build path.
 Dependency Rules
 ----------------
 
-Do not edit generated dependency checkouts under ``heris-soc/.bender/``.
-Normal builds call Bender internally.
+Use ``heris-soc/bendis_workspace/`` as the editable system workspace. Bendis is
+the main tool for HERIS dependency and package development.
 
-Use Bendis only when dependency declarations change, including a new version
-release. Ordinary RTL, simulation, software, board-target, and documentation
-changes do not require Bendis.
+Do not edit generated dependency checkouts under ``heris-soc/.bender/``.
+Normal builds consume the Bender metadata generated from the Bendis workspace.
 
 Generated files are part of the hardware flow. Regenerate them through make
 targets instead of editing generated output by hand:
@@ -78,3 +84,13 @@ targets instead of editing generated output by hand:
 
    cd heris-soc
    make hw
+
+Setup Complete
+--------------
+
+After the environment is configured, the first checks are:
+
+.. code-block:: sh
+
+   cd heris-soc
+   make test-env
