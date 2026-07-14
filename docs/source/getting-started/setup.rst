@@ -58,7 +58,7 @@ On Fedora, CentOS, or RHEL:
      gmp-devel gawk bison flex texinfo patchutils gcc gcc-c++ \
      zlib-devel expat-devel
 
-Get the sources:
+Get the sources in a separate working directory (e.g. ~/Downloads), not inside the HERIS checkout:
 
 .. code-block:: sh
 
@@ -71,31 +71,36 @@ If the repository was cloned without submodules:
 
    git submodule update --init --recursive
 
-Choose an empty install prefix. Use a writable path unless you intend to install
-under ``/opt`` with administrator permissions:
+Choose where the toolchain will be installed. This is the toolchain install
+prefix, not the HERIS checkout and not the toolchain source directory. For a
+normal user account, use a new directory under ``$HOME``:
 
 .. code-block:: sh
 
-   export RISCV=$HOME/tools/heris-riscv
-   mkdir -p "$RISCV"
-   export PATH=$RISCV/bin:$PATH
+   export HERIS_RISCV_TOOLCHAIN=$HOME/tools/heris-riscv
+   mkdir -p "$HERIS_RISCV_TOOLCHAIN"
+   export PATH=$HERIS_RISCV_TOOLCHAIN/bin:$PATH
+
+If you prefer an install path under ``/opt``, create an empty directory there
+with administrator permissions and make it writable before running
+``configure``.
 
 Configure and build the Newlib toolchain:
 
 .. code-block:: sh
 
-   ./configure --prefix="$RISCV" --with-arch=rv32imfcxpulpv3 --with-abi=ilp32 --enable-multilib
+   ./configure --prefix="$HERIS_RISCV_TOOLCHAIN" --with-arch=rv32imfcxpulpv3 --with-abi=ilp32 --enable-multilib
    make -j$(nproc)
 
 The build downloads upstream sources, patches them, and installs the toolchain
-under ``$RISCV``. Reserve several GiB of disk space.
+under ``$HERIS_RISCV_TOOLCHAIN``. Reserve several GiB of disk space.
 
 Check that the compiler is visible:
 
 .. code-block:: sh
 
    command -v riscv64-unknown-elf-gcc
-   riscv64-unknown-elf-gcc --target=help
+   riscv64-unknown-elf-gcc --target-help
 
 Use a fresh prefix when rebuilding with a different ``--with-arch`` or
 ``--with-abi``. Reusing a prefix from another Newlib toolchain can leave
