@@ -52,13 +52,8 @@ Install the build dependencies first. On Ubuntu:
      bc zlib1g-dev libexpat1-dev ninja-build git cmake libglib2.0-dev \
      libslirp-dev libncurses-dev
 
-On Fedora, CentOS, or RHEL:
-
-.. code-block:: sh
-
-   sudo yum install autoconf automake python3 libmpc-devel mpfr-devel \
-     gmp-devel gawk bison flex texinfo patchutils gcc gcc-c++ \
-     zlib-devel expat-devel
+On Fedora or other Linux distributions, the names 
+of dependencies may be similar but slightly different.
 
 Get the sources in a separate working directory (e.g. ~/Downloads), not inside the HERIS checkout:
 
