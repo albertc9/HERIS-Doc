@@ -66,7 +66,7 @@ Get the sources in a separate working directory (e.g. ~/Downloads), not inside t
 
    mkdir -p ~/src
    cd ~/src
-   git clone --recursive git@code.ihep.ac.cn:heris/heris-platform/riscv-gnu-toolchain.git
+   git clone --recursive git@github.com:pulp-platform/riscv-gnu-toolchain.git
    cd riscv-gnu-toolchain
 
 If the repository was cloned without submodules:
@@ -117,7 +117,7 @@ Do not globally export HERIS-internal variables such as ``PULP_ARCH_CFLAGS``
 or ``VSIM_PATH``. The repository test scripts select the CV32E40P ISA, ABI,
 runtime target, and simulator build path.
 
-See more details `here <https://code.ihep.ac.cn/heris/heris-platform/riscv-gnu-toolchain/-/blob/master/README.md>`_.
+See more details `here <https://github.com/pulp-platform/riscv-gnu-toolchain/-/blob/master/README.md>`_.
 
 Environment Check
 -----------------
