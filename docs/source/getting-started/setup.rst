@@ -131,7 +131,7 @@ setup with:
    command -v riscv64-unknown-elf-objdump
    command -v timeout
    command -v setsid
-   python3 -c 'from elftools.elf.elffile import ELFFile'
+   pip show pyelftools
 
 If ``pyelftools`` is missing, install it for the Python used above:
 
