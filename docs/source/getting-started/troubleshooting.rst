@@ -45,8 +45,7 @@ The runtime ELF and image utilities also require Python ``pyelftools`` and
 
 .. code-block:: sh
 
-   python3 -c 'from elftools.elf.elffile import ELFFile'
-   python3 -c 'import numpy'
+   pip show pyelftools numpy
 
 Wrong Runtime Target
 --------------------
