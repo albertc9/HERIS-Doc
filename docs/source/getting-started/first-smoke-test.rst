@@ -118,12 +118,6 @@ Run the KCU105 FPGA build from ``heris-soc``:
 
    make kcu105
 
-If Vivado is not available as ``vivado``, pass the command explicitly:
-
-.. code-block:: sh
-
-   make kcu105 VIVADO='vitis vivado'
-
 The build produces:
 
 * ``target/fpga/kcu105.bit``
