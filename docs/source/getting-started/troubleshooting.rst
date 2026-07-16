@@ -40,11 +40,13 @@ If the RISC-V tools are installed outside the current ``PATH``, add their
 
    export PATH=/path/to/riscv-toolchain/bin:$PATH
 
-The runtime ELF utilities also require Python ``pyelftools``. Check:
+The runtime ELF and image utilities also require Python ``pyelftools`` and
+``numpy``. Check:
 
 .. code-block:: sh
 
    python3 -c 'from elftools.elf.elffile import ELFFile'
+   python3 -c 'import numpy'
 
 Wrong Runtime Target
 --------------------

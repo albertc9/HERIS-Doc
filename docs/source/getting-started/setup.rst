@@ -33,7 +33,7 @@ HERIS development expects a Linux environment with:
 * `Bendis <https://crates.io/crates/bendis>`_. See
   :doc:`/bendis/bendis-install`.
 * `Bender <https://github.com/pulp-platform/bender>`_ by ``cargo install bender``.
-* Python ``pyelftools`` for runtime ELF handling.
+* Python ``pyelftools`` and ``numpy`` for runtime ELF and image handling.
 * GNU ``timeout`` and ``setsid``, by ``sudo apt install -y coreutils util-linux``.
 
 RISC-V Toolchain
@@ -131,13 +131,13 @@ setup with:
    command -v riscv64-unknown-elf-objdump
    command -v timeout
    command -v setsid
-   pip show pyelftools
+   pip show pyelftools numpy
 
-If ``pyelftools`` is missing, install it for the Python used above:
+If either package is missing, install it for the Python used above:
 
 .. code-block:: sh
 
-   python3 -m pip install --user pyelftools
+   python3 -m pip install --user pyelftools numpy
 
 Dependency Rules
 ----------------
