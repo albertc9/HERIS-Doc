@@ -27,9 +27,9 @@ RISC-V compiler utilities on ``PATH``. Check:
 
    command -v bender
    command -v vsim
-   command -v riscv64-unknown-elf-gcc
-   command -v riscv64-unknown-elf-ar
-   command -v riscv64-unknown-elf-objdump
+   command -v riscv64-unknown-elf-gcc || command -v riscv32-unknown-elf-gcc
+   command -v riscv64-unknown-elf-ar || command -v riscv32-unknown-elf-ar
+   command -v riscv64-unknown-elf-objdump || command -v riscv32-unknown-elf-objdump
    command -v timeout
    command -v setsid
 
