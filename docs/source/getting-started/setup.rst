@@ -29,7 +29,8 @@ HERIS development expects a Linux environment with:
 
 * Siemens QuestaSim, available as ``vsim``. Ask maintainers for it.
 * Xilinx Vivado v2023.2. Ask maintainers for the license. 
-* A RISC-V GCC toolchain providing ``riscv64-unknown-elf-*`` tools. See below.
+* A RISC-V GCC toolchain providing RV32-capable ``riscv64-unknown-elf-*`` or
+  ``riscv32-unknown-elf-*`` tools. See below.
 * `Bendis <https://crates.io/crates/bendis>`_. See
   :doc:`/bendis/bendis-install`.
 * `Bender <https://github.com/pulp-platform/bender>`_ by ``cargo install bender``.
@@ -101,8 +102,27 @@ Check that the compiler is visible:
 
 .. code-block:: sh
 
-   command -v riscv64-unknown-elf-gcc
-   riscv64-unknown-elf-gcc --target-help
+   command -v riscv64-unknown-elf-gcc || command -v riscv32-unknown-elf-gcc
+
+**Toolchain prefix and RV32 target.** The executable prefix and the generated
+program width are separate. A compiler named ``riscv64-unknown-elf-gcc`` can
+still build RV32 binaries when the build passes RV32 ISA and ABI flags. The
+HERIS smoke flow targets CV32E40P with:
+
+.. code-block:: sh
+
+   -march=rv32imfc_xcorev -mabi=ilp32f
+
+This is a 32-bit RISC-V target. The ``riscv64`` prefix is only the toolchain
+binary name.
+
+Current HERIS smoke scripts first look for ``riscv64-unknown-elf-*`` tools, then
+fall back to ``riscv32-unknown-elf-*`` tools. If your server only has the
+``riscv32`` prefix, make the choice explicit:
+
+.. code-block:: sh
+
+   CV32E40P_RISCV_PREFIX=riscv32-unknown-elf make smoke
 
 Use a fresh prefix when rebuilding with a different ``--with-arch`` or
 ``--with-abi``. Reusing a prefix from another Newlib toolchain can leave
@@ -126,9 +146,9 @@ setup with:
    command -v bender
    command -v vsim
    command -v vivado
-   command -v riscv64-unknown-elf-gcc
-   command -v riscv64-unknown-elf-ar
-   command -v riscv64-unknown-elf-objdump
+   command -v riscv64-unknown-elf-gcc || command -v riscv32-unknown-elf-gcc
+   command -v riscv64-unknown-elf-ar || command -v riscv32-unknown-elf-ar
+   command -v riscv64-unknown-elf-objdump || command -v riscv32-unknown-elf-objdump
    command -v timeout
    command -v setsid
    pip show pyelftools numpy
