@@ -15,8 +15,8 @@ From the top-level HERIS checkout:
    make smoke
 
 This is the normal first validation command. It checks the required tools,
-builds or reuses the QuestaSim model under ``build/questasim``, and runs the
-bounded CV32E40P software smoke set.
+automatically builds or reuses the appropriate QuestaSim model under
+``build/questasim``, and runs the bounded CV32E40P software smoke set.
 
 The current smoke profile is fixed to:
 
@@ -46,21 +46,6 @@ The platform build plus these nine tests produce the expected final summary:
    SMOKE PASSED
 
 Logs are written under ``heris-soc/notes/logs/``.
-
-Simulation Model Cache
-----------------------
-
-The normal command automatically rebuilds the cached ``vopt_tb`` when the RTL,
-testbench, Bender inputs, simulation configuration, or other hardware build
-inputs change. Changes to only a C regression test rebuild the software and
-reuse the existing simulation model.
-
-Use a forced rebuild only to request a clean platform build or recover from a
-damaged cache:
-
-.. code-block:: sh
-
-   make smoke REBUILD=1
 
 Run One Test
 ------------
