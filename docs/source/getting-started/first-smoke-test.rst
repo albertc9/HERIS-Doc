@@ -47,20 +47,20 @@ The platform build plus these nine tests produce the expected final summary:
 
 Logs are written under ``heris-soc/notes/logs/``.
 
-Rebuild The Simulation Model
-----------------------------
+Simulation Model Cache
+----------------------
 
-The normal command reuses a cached ``vopt_tb`` when its profile matches. Force
-RTL recompilation after changing RTL, the testbench, Bender source dependencies,
-or the core/FPU/Zfinx configuration:
+The normal command automatically rebuilds the cached ``vopt_tb`` when the RTL,
+testbench, Bender inputs, simulation configuration, or other hardware build
+inputs change. Changes to only a C regression test rebuild the software and
+reuse the existing simulation model.
+
+Use a forced rebuild only to request a clean platform build or recover from a
+damaged cache:
 
 .. code-block:: sh
 
    make smoke REBUILD=1
-
-Changing only a C regression test does not require ``REBUILD=1``. The test's
-``clean all run`` flow recompiles the software and loads it into the existing
-simulation model.
 
 Run One Test
 ------------
@@ -71,13 +71,6 @@ List the supported short names and run one test with the same CV32E40P profile:
 
    make test-list
    make test TEST=hello
-
-Use ``REBUILD=1`` only when the hardware simulation model also needs to be
-rebuilt:
-
-.. code-block:: sh
-
-   make test TEST=hello REBUILD=1
 
 Inspect The Effective Configuration
 -----------------------------------

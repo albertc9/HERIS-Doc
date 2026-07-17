@@ -64,22 +64,17 @@ target is wrong. Clear stale shell variables that point at the old
 ``PULPRT_HOME``, ``PULP_SDK_HOME``, ``PULPRT_TARGET``, and
 ``PULPRUN_TARGET``.
 
-Stale Simulator Build
----------------------
+Damaged Simulator Cache
+-----------------------
 
-If the simulator was built for a different core configuration, force a rebuild:
+``make smoke`` automatically rebuilds the simulation model when its hardware or
+simulation inputs change. If a platform build was interrupted or the cached
+``build/questasim`` directory is damaged, force a clean rebuild:
 
 .. code-block:: sh
 
    cd heris-soc
    make smoke REBUILD=1
-
-The expected current build configuration is:
-
-* ``CORE_TYPE=0``
-* ``USE_FPU=1``
-* ``USE_ZFINX=0``
-* ``USE_VIPS=0``
 
 Wrong Test For The Configuration
 --------------------------------
