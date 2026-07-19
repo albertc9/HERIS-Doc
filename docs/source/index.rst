@@ -29,7 +29,7 @@ The following map is the planned HERIS documentation structure. Section pages wi
 added incrementally.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Getting Started
 
    getting-started/overview
@@ -38,7 +38,7 @@ added incrementally.
    getting-started/troubleshooting
    
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Bendis
 
    bendis/bendis-install
@@ -47,7 +47,7 @@ added incrementally.
    bendis/bendis-config
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Architecture
 
    architecture/overview
@@ -59,7 +59,7 @@ added incrementally.
    architecture/boot-flow
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: RTL Development
 
    rtl-development/overview
@@ -71,7 +71,7 @@ added incrementally.
    rtl-development/modifying-pulp-ip
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Simulation
 
    simulation/overview
@@ -82,7 +82,7 @@ added incrementally.
    simulation/waveform-debugging
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Software Runtime
 
    software-runtime/overview
@@ -91,7 +91,7 @@ added incrementally.
    software-runtime/heris-sdk
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: FPGA Flow
 
    fpga-flow/overview
@@ -102,7 +102,7 @@ added incrementally.
    fpga-flow/fpga-debug
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Verification
 
    verification/overview
@@ -112,7 +112,7 @@ added incrementally.
    verification/pass-fail-policy
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Reference
 
    reference/tool-versions
