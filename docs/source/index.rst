@@ -86,12 +86,9 @@ added incrementally.
    :caption: Software Runtime
 
    software-runtime/overview
-   software-runtime/riscv-gnu-toolchain
-   software-runtime/runtime
-   software-runtime/bootcode
-   software-runtime/linker-script
-   software-runtime/drivers
-   software-runtime/regression-tests
+   software-runtime/simple-runtime
+   software-runtime/build-and-startup
+   software-runtime/heris-sdk
 
 .. toctree::
    :maxdepth: 2
