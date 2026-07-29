@@ -178,11 +178,7 @@ Tagging and Release
    for more information.
 
 3. Name tags using the format ``vX.Y.Z``, where ``X``, ``Y``, and ``Z`` are
-   integers. Examples include:
-
-   * ``v0.1.0``
-   * ``v1.0.0``
-   * ``v2.3.4``
+   integers. Examples include ``v0.1.0``, ``v1.0.0`` or ``v2.3.4``.
 
    A tag is a snapshot of a specific version of the module. A parent module can
    use the tag to refer to that exact version.
