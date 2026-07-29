@@ -106,6 +106,7 @@ added incrementally.
    :caption: Verification
 
    verification/overview
+   verification/ci-pipeline
    verification/smoke-tests
    verification/software-regression
    verification/rtl-regression
