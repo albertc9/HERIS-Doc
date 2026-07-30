@@ -34,8 +34,8 @@ The simulation jobs always request a clean platform rebuild:
    make smoke REBUILD=1
    make full-test REBUILD=1
 
-Smoke and Full-test currently run the same nine CV32E40P software tests. They
-remain separate commands so that their coverage can change independently.
+Smoke and Full-test currently run the same nine CV32E40P software tests at the moment. They
+remain separate commands so that their coverage can change independently in the near future.
 
 Each simulation job writes a JUnit report for the GitLab merge request. Test
 failures are collected before the suite fails. Environment or platform build
@@ -95,6 +95,3 @@ procedure:
 * A merge request to ``master`` needs one Maintainer approval.
 * The author may provide the approval.
 * Review the merge request again after new commits.
-
-This GitLab edition does not provide project approval rules, so the approval
-procedure is not enforced by a bot or access token.
