@@ -1,9 +1,9 @@
 project = 'HERIS Documentation'
 copyright = '2026, IHEP'
-author = 'Albert ZHANG'
+author = 'Albert Zhang'
 
 release = '0.1'
-version = '0.1.0'
+version = '0.1.1'
 
 
 extensions = [
