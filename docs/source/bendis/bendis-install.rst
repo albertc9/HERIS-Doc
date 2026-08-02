@@ -31,3 +31,6 @@ If ``~/.cargo/bin`` is not already on ``PATH``, add it for the current shell:
    bender --version
    bendis --version
 
+Bendis 0.6.4 requires Rust 1.89 or newer. Dependency updates require
+Bender ``>=0.32.1,<0.33.0``; Bender 0.33 and later are rejected until Bendis
+updates its embedded Bender schema.

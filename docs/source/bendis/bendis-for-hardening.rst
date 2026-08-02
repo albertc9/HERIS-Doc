@@ -13,13 +13,13 @@ Use this workflow when testing:
 
 .. important::
 
-   Always run ``bendis update --hard`` from the project root directory ``heris/heris-soc``.
+   Hard mode is supported only from the ``heris-soc`` project root. Always run
+   ``bendis update --hard`` from ``heris/heris-soc``.
 
 Requirements
 ------------
 
-1. Install Bendis 0.5.12 or later and a Bender version that supports
-   ``bender script template-json``.
+1. Install Bendis 0.6.4 and Bender ``>=0.32.1,<0.33.0``.
 
 2. Place the AegisRTL repository next to the project root. For HERIS, the
    directory structure is:

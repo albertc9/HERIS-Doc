@@ -37,14 +37,32 @@ The user-facing settings are:
    root ``.bender/`` or the AegisRTL cache.
 
 ``gitignore_check``
-   Default: ``1``. Reports a warning when required entries are missing from
-   ``bendis_workspace/.gitignore``. Set it to ``0`` to disable the warning.
-   Bendis still maintains ignore entries for detected local dependency
-   directories during an update.
+   Default: ``1``. Retained for configuration compatibility. Bendis always
+   maintains its delimited block in ``bendis_workspace/.gitignore`` during an
+   update.
 
-The ``first_run`` and ``version`` fields are internal state used for the
-welcome message and version-change notice. They normally do not need manual
-changes.
+The ``first_run`` and ``version`` fields are internal compatibility state.
+They do not need manual changes.
+
+Initialization
+--------------
+
+Initialize a project from its root directory:
+
+.. code-block:: sh
+
+   bendis init
+
+If ``bendis_workspace/`` already exists, interactive initialization asks for
+confirmation and defaults to No. For an intentional non-interactive
+replacement, use:
+
+.. code-block:: sh
+
+   bendis init --force
+
+This replaces the complete workspace. Commit or back up editable workspace
+configuration first.
 
 Editable and Generated Files
 ----------------------------
@@ -57,6 +75,34 @@ Edit dependency declarations only in:
 Edit project-local RTL and other local dependency files in their root-level
 directories. Do not edit generated root configuration, lock files, or files
 under ``.bender/``. A later update may replace them.
+
+Inspect the active project-local input set without changing files:
+
+.. code-block:: sh
+
+   bendis local-inputs
+   bendis local-inputs --json
+
+The JSON form is intended for tools. Both forms read the authoritative
+``bendis_workspace/Bender.yml`` and optional
+``bendis_workspace/.bender.yml``.
+
+Workspace Ignore Rules
+----------------------
+
+During ``bendis update``, Bendis maintains only a delimited block in
+``bendis_workspace/.gitignore``. For example:
+
+.. code-block:: text
+
+   # BEGIN BENDIS MANAGED INPUTS
+   /.bender/
+   /.bendis/
+   /hw/
+   # END BENDIS MANAGED INPUTS
+
+The mirrored input entries are derived from the active Bender configuration.
+Bendis preserves user rules outside this block and does not modify the project-root ``.gitignore``.
 
 Other Bender Commands
 ---------------------
