@@ -30,6 +30,11 @@ and shared-L2 paths. It is included in ``make full-test`` but not in the shorter
 ``hwpe-mac-engine`` repository; it is a prerequisite, not a substitute for
 this SoC test.
 
+The recorded integration validation passes the focused Questa test and KCU105
+implementation at an FC period of 10.000 ns. KCU105 reports setup WNS
+0.000 ns, hold WHS 0.030 ns, pulse-width WPWS 0.500 ns, and no error-level DRC
+violations. Setup meets the gate with no positive margin.
+
 Operation
 ---------
 
@@ -376,5 +381,6 @@ The test verifies presence and reset state, acquires both context IDs, runs
 pass marker is ``HWPE MAC INTEGRATION PASS``.
 
 For server acceptance, use the ordered validation command documented in
-:doc:`/verification/ci-pipeline`. Do not record the integration as accepted
-until that command passes with Questa and Vivado.
+:doc:`/verification/ci-pipeline`. The current 2.1.4 integration has passed this
+gate with Questa and Vivado. Re-run it after an RTL, dependency, target, or
+validation change.

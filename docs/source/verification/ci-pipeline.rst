@@ -89,9 +89,12 @@ test passes. Results are written under
 ``HWPE_VALIDATION_DIR`` to select another directory. Set
 ``FC_CLK_PERIOD_NS`` to override the default 10 ns FC clock period.
 
-A complete run ends with ``HWPE MAC validation: PASS``. The directory retains
-``hwpe-test.log``, ``hwpe-test.xml``, ``simulation/transcript``,
-``simulation/trace_core_*.log``, and KCU105 reports as acceptance evidence.
+A complete run ends with ``HWPE MAC validation: PASS``. The validation
+directory retains ``hwpe-test.log``, ``hwpe-test.xml``,
+``simulation/transcript``, ``simulation/trace_core_*.log``,
+``kcu105-console.log``, and the KCU105 log, summary, and JUnit report. Detailed
+reports remain under ``target/fpga/kcu105/reports``; generated images remain at
+``target/fpga/kcu105.bit`` and ``target/fpga/kcu105.bin``.
 
 Dependencies And Retry
 ----------------------
