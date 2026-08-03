@@ -53,6 +53,7 @@ added incrementally.
    architecture/overview
    architecture/repository-layout
    architecture/integration
+   architecture/hwpe-mac
    architecture/core-configuration
    architecture/memory-map
    architecture/clock-and-reset
