@@ -18,6 +18,7 @@ grep -qF '``include/hal/hwme/hwme_v1.h``' "$RUNTIME"
 grep -qF 'scripts/hwpe/run_hwpe_mac_validation.sh' "$CI"
 grep -qF 'WNS, WHS, or WPWS is negative' "$CI"
 grep -qF 'error-level DRC violation' "$CI"
+grep -qF 'methodology and CDC reports' "$CI"
 
 if grep -qF 'simulation and FPGA tops set ``USE_HWPE`` to zero' "$ARCHITECTURE"; then
   echo 'stale disabled-HWPE status remains in documentation' >&2
