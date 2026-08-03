@@ -53,6 +53,21 @@ The bundled runtime header declares these interfaces. Until ``heris-sdk``
 provides HERIS-owned public headers, use an existing regression test as the
 include and build reference.
 
+HWPE MAC HAL
+------------
+
+The PULPissimo runtime exposes the HWPE MAC v1 HAL through ``<hal/pulp.h>``.
+The implementation is in ``include/hal/hwme/hwme_v1.h``. It provides context
+acquisition, job configuration, trigger and status accessors, and event 140/141
+mask helpers. Applications should use these accessors instead of open-coding
+memory-mapped register accesses.
+
+The CPU-driven reference is
+``sw/regression_tests/hwpe_mac_integration/test.c``. It uses FC core 0, places
+all accelerator buffers in shared L2, and preserves the event mask around the
+event-driven job. The complete register layout remains in the runtime headers
+and is not duplicated here.
+
 Current Target
 --------------
 
@@ -65,7 +80,8 @@ Validation
 
 ``make smoke`` validates startup and exit, testbench stdout, floating-point and
 basic integer execution, misaligned access, the UART loopback, and three
-standalone algorithms. The exact test list is maintained in
+standalone algorithms. ``make full-test`` adds the HWPE MAC SoC integration
+workload. The exact smoke list is maintained in
 :doc:`/getting-started/first-smoke-test`.
 
 The L2 allocator and interrupt initialization do not have isolated smoke tests.

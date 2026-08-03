@@ -19,14 +19,16 @@ high-performance MAC array.
 Current Status
 --------------
 
-The ``hwpe-mac-engine`` development branch has a CPU-free module testbench. Its
-complete 23-test Questa regression passes, including arithmetic boundaries,
-TCDM backpressure, reset recovery, consecutive jobs, and context handling.
+The current ``heris-soc`` integration pins ``hwpe-mac-engine`` 2.1.4 and
+``pulp_soc`` 7.0.6. ``USE_HWPE`` is enabled by default for the generic SoC,
+the two Questa simulation tops, and KCU105. KC705 remains disabled and is not
+part of this integration.
 
-This does not mean that the accelerator is enabled in HERIS SoC. The current
-``heris-soc`` manifest requests ``hwpe-mac-engine`` 1.3.3, while the simulation
-and FPGA tops set ``USE_HWPE`` to zero. The HAL and SoC integration path are
-present, but there is no HERIS software regression that runs the accelerator.
+The CPU-driven ``hwpe_mac_integration`` regression checks the control, event,
+and shared-L2 paths. It is included in ``make full-test`` but not in the shorter
+``make smoke`` suite. Module-level verification remains in the
+``hwpe-mac-engine`` repository; it is a prerequisite, not a substitute for
+this SoC test.
 
 Operation
 ---------
@@ -246,39 +248,25 @@ The four HWPE TCDM masters enter the L2 interconnect. They are not private
 memories, so SoC validation must cover contention with normal core traffic and
 must use addresses visible through the interleaved L2 path.
 
-Current Enable Points
-~~~~~~~~~~~~~~~~~~~~~
+Default Enablement
+~~~~~~~~~~~~~~~~~~
 
-The following files currently keep HWPE disabled:
+``USE_HWPE`` is enabled by default at these integration points:
 
-* ``heris-soc/hw/pulpissimo.sv`` defaults ``USE_HWPE`` to zero.
-* ``heris-soc/target/sim/tb/tb_pulp_simple.sv`` passes zero explicitly.
-* ``heris-soc/target/sim/tb/tb_pulp.sv`` passes zero explicitly.
-* ``heris-soc/target/fpga/kcu105/rtl/xilinx_pulpissimo.v`` uses a zero
-  ``USE_HWPE`` local parameter.
-* ``heris-soc/target/fpga/kc705/rtl/xilinx_pulpissimo.v`` does the same.
+* ``heris-soc/hw/pulpissimo.sv``
+* ``heris-soc/target/sim/tb/tb_pulp_simple.sv``
+* ``heris-soc/target/sim/tb/tb_pulp.sv``
+* ``heris-soc/target/fpga/kcu105/rtl/xilinx_pulpissimo.v``
 
-Enable one target at a time. Start with the non-VIP Questa simulation target;
-do not enable every simulation and FPGA target in one change.
+The KCU105 wrapper sets the parameter explicitly. KC705 remains at zero.
 
-Integration Checks Before Enablement
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adapter Contract
+~~~~~~~~~~~~~~~~
 
-The current ``pulp_soc/rtl/fc/fc_hwpe.sv`` wrapper contains assumptions that
-must be reviewed with the module update:
-
-* The TCDM binding loop is fixed at four ports.
-* ``busy_o`` is tied high.
-* Only ``s_evt[0]`` is assigned to the two-bit SoC event output.
-* ``periph_id`` is tied to zero instead of carrying the requester's identity
-  into ``mac_top_wrap``.
-
-The current ``rtl/mac_top.sv`` controller instantiation is also fixed to two
-cores and two contexts. These values match the module testbench, but the SoC
-wrapper, peripheral identity, and event routing must be checked explicitly
-rather than inferred from the parameters on ``mac_top_wrap``. In particular,
-the module testbench's core-1 scenario does not prove multi-master identity
-through the current HERIS SoC wrapper.
+``pulp_soc/rtl/fc/fc_hwpe.sv`` owns the SoC adapter. It requires exactly four
+TCDM master ports, assigns the FC core-0 peripheral ID, connects both core-0
+completion events, and leaves the two hardware job contexts in the MAC
+controller. The current HERIS integration does not expose a core-1 claim path.
 
 Do not edit files under ``heris-soc/.bender``. They are generated dependency
 checkouts. Change the owning dependency repository, update the dependency
@@ -363,22 +351,25 @@ only after all of the following are demonstrated:
 #. ``heris-soc`` pins the intended verified MAC revision.
 #. The Questa simulation top enables ``USE_HWPE`` and builds from a clean
    Bender checkout.
-#. A polling software regression programs both modes and checks exact D memory.
-#. Completion polling and event routing agree with the software-visible model.
+#. The ``hwpe_mac_integration`` regression programs both modes and checks exact
+   D memory and guard words.
+#. Polling completion and event 140 agree with the software-visible model.
 #. HWPE traffic runs correctly through interleaved L2 while the core is active.
 #. The existing HERIS smoke and full-test suites remain green.
-#. The selected FPGA target builds with HWPE enabled and meets its normal
-   timing and artifact gates.
+#. KCU105 builds with HWPE enabled, produces its required artifacts, and passes
+   setup, hold, pulse-width, and DRC gates.
 
-The first SoC test should be a short ``simple_mult`` polling case. Add it under
-``heris-soc/sw/regression_tests`` and register it in the CV32E40P test runner.
-After registration, the expected developer commands are:
+Run the SoC test directly or through the complete regression:
 
 .. code-block:: sh
 
-   make test TEST=hwpe_mac REBUILD=1
-   make smoke REBUILD=1
+   make test TEST=hwpe_mac_integration REBUILD=1
    make full-test REBUILD=1
 
-The test name is not available in the current checkout; it is the intended
-public entry after the software regression is added.
+The test verifies presence and reset state, acquires both context IDs, runs
+``simple_mult`` by polling, and runs ``scalar_prod`` with event 140. Its exact
+pass marker is ``HWPE MAC INTEGRATION PASS``.
+
+For server acceptance, use the ordered validation command documented in
+:doc:`/verification/ci-pipeline`. Do not record the integration as accepted
+until that command passes with Questa and Vivado.
