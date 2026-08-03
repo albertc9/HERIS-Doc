@@ -51,7 +51,8 @@ The KCU105 job runs ``make kcu105`` and blocks the pipeline when:
 * WNS, WHS, or WPWS is negative.
 * Vivado reports an error-level DRC violation.
 * ``kcu105.bit`` or ``kcu105.bin`` is missing or empty.
-* A required timing or utilization report is missing or empty.
+* A required timing, utilization, methodology, or CDC report is missing or
+  empty.
 * The KCU105 JUnit report cannot be generated.
 
 TNS, THS, TPWS, timing warnings, unconstrained paths, and utilization are
@@ -62,6 +63,7 @@ The merge request evidence includes:
 * Implementation status and duration.
 * Setup WNS and TNS, hold WHS and THS, and pulse-width WPWS and TPWS.
 * The number of error-level DRC violations.
+* The required methodology and CDC reports.
 * Bitstream and configuration image sizes.
 * Required report status.
 * LUT, register, BRAM, and DSP utilization.
