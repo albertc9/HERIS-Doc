@@ -7,6 +7,11 @@ four TCDM ports, performs multiplication or multiply-accumulate operations,
 writes the result to memory, and reports completion through the HWPE control
 interface.
 
+Unlike a DMA-fed accelerator, an HWPE operates directly on memory shared with
+the core. Software exchanges pointers and configuration values with the engine
+through a memory-mapped peripheral interface; input and output data remain in
+shared L2 memory.
+
 The design is intentionally compact. It is useful as an integration reference
 and as a starting point for HWPE development; it is not intended to be a
 high-performance MAC array.
@@ -88,28 +93,47 @@ This implementation uses the legacy HWPE-Mem/TCDM and ``hwpe-stream``
 interfaces. It does not use HCI. Treat an HCI conversion as a separate design
 change, not as part of enabling the existing MAC in HERIS.
 
+Interface Contracts
+~~~~~~~~~~~~~~~~~~~
+
+Three protocols appear in the current design:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Protocol
+     - Boundary
+     - Transaction
+   * - HWPE-Stream
+     - Streamer to compute engine
+     - ``valid && ready``
+   * - HWPE-Mem
+     - Streamer to L2/TCDM
+     - ``req && gnt``, followed by a read response
+   * - HWPE-Periph
+     - SoC control interconnect to ``mac_ctrl``
+     - ``req && gnt`` with ``id`` and ``r_id``
+
+On HWPE-Stream, a valid payload must remain stable until it is accepted.
+``valid`` must not depend combinationally on ``ready``, and it may deassert
+only after a handshake. These rules apply to the A/B/C/D streams and the
+pipeline handshakes inside ``mac_engine``.
+
+An HWPE-Mem request is accepted only on ``req && gnt``. An accepted read must
+return ``r_valid`` and ``r_data`` in the following cycle; a memory that cannot
+meet this latency must delay ``gnt``. The accelerator must not depend on
+``r_valid`` after a write because that behavior is not uniform across TCDM
+implementations.
+
 RTL Structure
 -------------
 
-The data and control path is:
+.. figure:: /_static/hwpe-mac-rtl.svg
+   :alt: HWPE MAC control and data paths
+   :align: center
+   :width: 100%
 
-.. code-block:: text
-
-   peripheral configuration
-            |
-            v
-      mac_ctrl / mac_fsm
-            |
-            +------> mac_streamer <------> four TCDM ports
-            |              |
-            v              v
-        configuration   A/B/C/D streams
-                           |
-                           v
-                      mac_engine
-                           |
-                           v
-                       D writeback
+   Control and data paths of the current HWPE MAC implementation.
 
 The main source files are in the ``hwpe-mac-engine`` repository:
 
@@ -246,11 +270,15 @@ must be reviewed with the module update:
 * The TCDM binding loop is fixed at four ports.
 * ``busy_o`` is tied high.
 * Only ``s_evt[0]`` is assigned to the two-bit SoC event output.
+* ``periph_id`` is tied to zero instead of carrying the requester's identity
+  into ``mac_top_wrap``.
 
 The current ``rtl/mac_top.sv`` controller instantiation is also fixed to two
 cores and two contexts. These values match the module testbench, but the SoC
-wrapper and event routing must be checked explicitly rather than inferred from
-the parameters on ``mac_top_wrap``.
+wrapper, peripheral identity, and event routing must be checked explicitly
+rather than inferred from the parameters on ``mac_top_wrap``. In particular,
+the module testbench's core-1 scenario does not prove multi-master identity
+through the current HERIS SoC wrapper.
 
 Do not edit files under ``heris-soc/.bender``. They are generated dependency
 checkouts. Change the owning dependency repository, update the dependency
