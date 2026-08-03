@@ -185,7 +185,8 @@ The current programming rules are:
   into bit 0.
 * Write vector stride in bytes.
 * Trigger only after all configuration writes complete.
-* Treat ``FINISHED`` as read-to-clear.
+* Treat ``FINISHED`` as read-to-clear and read it only after completion.
+* Poll ``STATUS`` until the context is idle, or wait for the completion event.
 
 The module testbench keeps the current, verified programming sequence in
 ``hwpe-mac-engine/tb/rtl/tb_mac_top.sv`` under ``program_job``. This sequence
@@ -213,12 +214,16 @@ A polling implementation follows this order:
    hwme_vectstride_set(vector_stride);
    hwme_trigger_job();
 
-   while (HWME_READ(HWME_FINISHED) == 0) {
-       /* Wait for completion. Reading FINISHED clears a completed job. */
+   while (hwme_status_get() != 0) {
+       /* Wait for the context to become idle. */
+   }
+   if (hwme_finished_get() != 1) {
+       /* Completion count mismatch. FINISHED is read-to-clear. */
    }
 
-This is the control sequence, not a current HERIS application example. A SoC
-regression must be added before this interface is considered supported.
+Do not poll ``FINISHED``: a read clears its completion count. The
+``hwpe_mac_integration`` SoC regression uses the sequence above and separately
+checks event-driven completion.
 
 HERIS SoC Integration
 ---------------------

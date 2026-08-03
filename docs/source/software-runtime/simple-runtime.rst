@@ -66,7 +66,8 @@ The CPU-driven reference is
 ``sw/regression_tests/hwpe_mac_integration/test.c``. It uses FC core 0, places
 all accelerator buffers in shared L2, and preserves the event mask around the
 event-driven job. The complete register layout remains in the runtime headers
-and is not duplicated here.
+and is not duplicated here. Poll ``STATUS`` for idle before reading the
+read-to-clear ``FINISHED`` count.
 
 Current Target
 --------------

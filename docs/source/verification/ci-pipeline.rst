@@ -82,15 +82,16 @@ QuestaSim and Vivado:
 
    ./scripts/hwpe/run_hwpe_mac_validation.sh
 
-The script runs ``make full-test REBUILD=1`` first and requires the HWPE pass
-marker. It starts KCU105 implementation only after simulation passes. Results
-are written under ``notes/hwpe-mac-validation/<timestamp>`` by default; set
+The script runs ``make full-test TEST=hwpe_mac_integration REBUILD=1`` and
+requires the HWPE pass marker. It starts KCU105 implementation only after that
+test passes. Results are written under
+``notes/hwpe-mac-validation/<timestamp>`` by default; set
 ``HWPE_VALIDATION_DIR`` to select another directory. Set
 ``FC_CLK_PERIOD_NS`` to override the default 10 ns FC clock period.
 
-A complete run ends with ``HWPE MAC validation: PASS``. Preserve the summary,
-JUnit files, simulation log, KCU105 reports, and generated images as acceptance
-evidence.
+A complete run ends with ``HWPE MAC validation: PASS``. The directory retains
+``hwpe-test.log``, ``hwpe-test.xml``, ``simulation/transcript``,
+``simulation/trace_core_*.log``, and KCU105 reports as acceptance evidence.
 
 Dependencies And Retry
 ----------------------
