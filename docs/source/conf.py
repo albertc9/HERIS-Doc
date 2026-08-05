@@ -1,5 +1,5 @@
 project = 'HERIS Documentation'
-copyright = '2026, Albert Zhang'
+copyright = '2026, Albert Zhang · IHEP'
 author = 'Albert Zhang'
 
 release = '0.2'
