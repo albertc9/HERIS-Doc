@@ -3,7 +3,7 @@ copyright = '2026, Albert Zhang · IHEP'
 author = 'Albert Zhang'
 
 release = '0.2'
-version = '0.2.0'
+version = '0.2.1'
 
 
 extensions = [
