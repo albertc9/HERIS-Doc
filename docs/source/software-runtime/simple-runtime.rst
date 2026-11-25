@@ -69,20 +69,23 @@ event-driven job. The complete register layout remains in the runtime headers
 and is not duplicated here. Poll ``STATUS`` for idle before reading the
 read-to-clear ``FINISHED`` count.
 
+The accelerator is not instantiated by default (``USE_HWPE=0``), so this HAL
+applies only to a SoC built with it. See :doc:`/architecture/hwpe-mac`.
+
 Current Target
 --------------
 
 The supported target is a single CV32E40P core using
-``-march=rv32imfc_xcorev`` and the ``ilp32f`` ABI. The FPU is enabled and Zfinx
-is disabled. The default execution target is QuestaSim RTL simulation.
+``-march=rv32imc_xcorev`` and the ``ilp32`` ABI. The FPU and Zfinx are
+disabled. The default execution target is QuestaSim RTL simulation.
 
 Validation
 ----------
 
-``make smoke`` validates startup and exit, testbench stdout, floating-point and
-basic integer execution, misaligned access, the UART loopback, and three
-standalone algorithms. ``make full-test`` adds the HWPE MAC SoC integration
-workload. The exact smoke list is maintained in
+``make smoke`` validates startup and exit, testbench stdout, the absence of the
+FPU and the HWPE accelerator, basic integer execution, misaligned access, the
+UART loopback, and three standalone algorithms. ``make full-test`` currently
+runs the same tests. The exact smoke list is maintained in
 :doc:`/getting-started/first-smoke-test`.
 
 The L2 allocator and interrupt initialization do not have isolated smoke tests.

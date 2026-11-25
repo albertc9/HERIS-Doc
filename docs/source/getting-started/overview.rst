@@ -5,8 +5,9 @@ The current bring-up target is:
 
 * board: Xilinx KCU105
 * core: CV32E40P
-* FPU: enabled
+* FPU: disabled
 * Zfinx: disabled
+* HWPE accelerator: disabled
 * default validation path: QuestaSim RTL simulation
 
 The top-level HERIS checkout

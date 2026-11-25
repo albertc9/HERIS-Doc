@@ -46,7 +46,7 @@ Runtime sources are compiled and linked with each application:
        -> execution
 
 The default flow builds a 32-bit CV32E40P application with
-``-march=rv32imfc_xcorev`` and ``-mabi=ilp32f``. The compiler executable prefix
+``-march=rv32imc_xcorev`` and ``-mabi=ilp32``. The compiler executable prefix
 does not determine the generated program width. Toolchain setup is documented
 in :doc:`/getting-started/setup`.
 

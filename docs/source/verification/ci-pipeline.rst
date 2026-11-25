@@ -34,9 +34,8 @@ The simulation jobs always request a clean platform rebuild:
    make smoke REBUILD=1
    make full-test REBUILD=1
 
-Smoke runs nine CV32E40P software tests. Full-test adds
-``hwpe_mac_integration``, a CPU-driven SoC test of the HWPE control, event, and
-shared-L2 paths. Its pass marker is ``HWPE MAC INTEGRATION PASS``.
+Smoke runs nine CV32E40P software tests. Full-test currently runs the same
+nine tests. Both build the SoC without the FPU and the HWPE accelerator.
 
 Each simulation job writes a JUnit report for the GitLab merge request. Test
 failures are collected before the suite fails. Environment or platform build
@@ -75,6 +74,12 @@ retained for one week.
 HWPE Server Validation
 ----------------------
 
+This flow applies to a SoC built with ``USE_HWPE`` enabled. The default
+configuration leaves the accelerator out and does not register
+``hwpe_mac_integration``, a CPU-driven SoC test of the HWPE control, event, and
+shared-L2 paths. Until both are enabled again, the script stops at its first
+step with ``Unknown CV32E40P test: hwpe_mac_integration``.
+
 From ``heris-soc``, run the complete HWPE acceptance flow on a host with
 QuestaSim and Vivado:
 
@@ -83,8 +88,8 @@ QuestaSim and Vivado:
    ./scripts/hwpe/run_hwpe_mac_validation.sh
 
 The script runs ``make full-test TEST=hwpe_mac_integration REBUILD=1`` and
-requires the HWPE pass marker. It starts KCU105 implementation only after that
-test passes. Results are written under
+requires the pass marker ``HWPE MAC INTEGRATION PASS``. It starts KCU105
+implementation only after that test passes. Results are written under
 ``notes/hwpe-mac-validation/<timestamp>`` by default; set
 ``HWPE_VALIDATION_DIR`` to select another directory. Set
 ``FC_CLK_PERIOD_NS`` to override the default 10 ns FC clock period.

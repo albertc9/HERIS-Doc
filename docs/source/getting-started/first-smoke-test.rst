@@ -21,15 +21,16 @@ automatically builds or reuses the appropriate QuestaSim model under
 The current smoke profile is fixed to:
 
 * ``CORE_TYPE=0``: CV32E40P.
-* ``USE_FPU=1``: single-precision floating-point support enabled.
-* ``USE_ZFINX=0``: a separate floating-point register file and ``ilp32f`` ABI.
+* ``USE_FPU=0``: no floating-point unit.
+* ``USE_ZFINX=0``: no Zfinx. Software uses the ``ilp32`` ABI.
+* ``USE_HWPE=0``: no HWPE accelerator.
 * ``USE_VIPS=0``: optional peripheral VIP models disabled.
 * ``bootmode=fast_debug``: testbench hierarchy preload for fast simulation.
 
 The smoke set contains:
 
 * ``hello``
-* ``fpu_smoke``
+* ``disabled_blocks``
 * ``testALU``
 * ``testMUL``
 * ``testMisaligned``
@@ -75,9 +76,11 @@ the separate legacy ``pulpissimo`` checkout.
 What The Smoke Proves
 ---------------------
 
-Passing the smoke test shows that the CV32E40P, FPU, basic memory and bus path,
+Passing the smoke test shows that the CV32E40P, basic memory and bus path,
 runtime, software toolchain, QuestaSim model, and selected UART path work
-together for the covered cases.
+together for the covered cases. ``disabled_blocks`` shows that the FPU and the
+HWPE accelerator are absent: floating-point instructions trap as illegal, and
+an access to the HWPE window returns zero.
 
 The smoke uses ``fast_debug`` hierarchy preload. It does not prove:
 

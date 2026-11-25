@@ -111,7 +111,7 @@ HERIS smoke flow targets CV32E40P with:
 
 .. code-block:: sh
 
-   -march=rv32imfc_xcorev -mabi=ilp32f
+   -march=rv32imc_xcorev -mabi=ilp32
 
 This is a 32-bit RISC-V target. The ``riscv64`` prefix is only the toolchain
 binary name.

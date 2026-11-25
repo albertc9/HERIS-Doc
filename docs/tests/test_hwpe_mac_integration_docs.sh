@@ -10,14 +10,14 @@ SPHINX_BUILD="${SPHINX_BUILD:-$ROOT/.venv/bin/sphinx-build}"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-grep -qF '``USE_HWPE`` is enabled by default' "$ARCHITECTURE"
+grep -qF '``USE_HWPE`` is disabled by default' "$ARCHITECTURE"
 grep -qF '``hwpe_mac_integration``' "$ARCHITECTURE"
-grep -qF '``hwpe-mac-engine`` 2.1.4' "$ARCHITECTURE"
-grep -qF '``pulp_soc`` 7.0.6' "$ARCHITECTURE"
+grep -qF '``hwpe-mac-engine`` 2.1.5' "$ARCHITECTURE"
+grep -qF '``pulp_soc`` 7.1.0' "$ARCHITECTURE"
 grep -qF 'Poll ``STATUS`` until the context is idle' "$ARCHITECTURE"
 grep -qF 'The recorded integration validation passes' "$ARCHITECTURE"
 grep -qF 'Setup meets the gate with no positive margin.' "$ARCHITECTURE"
-grep -qF 'current 2.1.4 integration has passed this' "$ARCHITECTURE"
+grep -qF 'The 2.1.5 integration passed this gate' "$ARCHITECTURE"
 grep -qF '``include/hal/hwme/hwme_v1.h``' "$RUNTIME"
 grep -qF 'scripts/hwpe/run_hwpe_mac_validation.sh' "$CI"
 grep -qF 'make full-test TEST=hwpe_mac_integration REBUILD=1' "$CI"
@@ -28,8 +28,8 @@ grep -qF 'WNS, WHS, or WPWS is negative' "$CI"
 grep -qF 'error-level DRC violation' "$CI"
 grep -qF 'methodology and CDC reports' "$CI"
 
-if grep -qF 'simulation and FPGA tops set ``USE_HWPE`` to zero' "$ARCHITECTURE"; then
-  echo 'stale disabled-HWPE status remains in documentation' >&2
+if grep -qF '``USE_HWPE`` is enabled by default' "$ARCHITECTURE"; then
+  echo 'stale enabled-HWPE status remains in documentation' >&2
   exit 1
 fi
 if grep -qF 'while (HWME_READ(HWME_FINISHED) == 0)' "$ARCHITECTURE"; then

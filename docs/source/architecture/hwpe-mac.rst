@@ -19,21 +19,24 @@ high-performance MAC array.
 Current Status
 --------------
 
-The current ``heris-soc`` integration pins ``hwpe-mac-engine`` 2.1.4 and
-``pulp_soc`` 7.0.6. ``USE_HWPE`` is enabled by default for the generic SoC,
-the two Questa simulation tops, and KCU105. KC705 remains disabled and is not
-part of this integration.
+The current ``heris-soc`` integration pins ``hwpe-mac-engine`` 2.1.5 and
+``pulp_soc`` 7.1.0. ``USE_HWPE`` is disabled by default for the generic SoC,
+the two Questa simulation tops, and the KCU105, KC705, and Yehuo targets. The
+accelerator remains an optional configuration. The rest of this page describes
+a SoC built with ``USE_HWPE`` enabled.
 
 The CPU-driven ``hwpe_mac_integration`` regression checks the control, event,
-and shared-L2 paths. It is included in ``make full-test`` but not in the shorter
-``make smoke`` suite. Module-level verification remains in the
-``hwpe-mac-engine`` repository; it is a prerequisite, not a substitute for
-this SoC test.
+and shared-L2 paths. It is not registered in ``make smoke`` or
+``make full-test`` while the accelerator is disabled. Module-level
+verification remains in the ``hwpe-mac-engine`` repository; it is a
+prerequisite, not a substitute for this SoC test.
 
 The recorded integration validation passes the focused Questa test and KCU105
 implementation at an FC period of 10.000 ns. KCU105 reports setup WNS
 0.000 ns, hold WHS 0.030 ns, pulse-width WPWS 0.500 ns, and no error-level DRC
-violations. Setup meets the gate with no positive margin.
+violations. Setup meets the gate with no positive margin. This validation was
+made with ``USE_HWPE`` enabled and ``pulp_soc`` 7.0.6. It has not been repeated
+with ``pulp_soc`` 7.1.0.
 
 Operation
 ---------
@@ -245,8 +248,9 @@ The integration path crosses the HERIS top and the ``pulp_soc`` dependency:
        -> hwpe-mac-engine/wrap/mac_top_wrap.sv
 
 ``USE_HWPE`` is propagated through this chain. When it is zero,
-``fc_subsystem`` does not instantiate ``fc_hwpe`` and ties off the HWPE APB,
-event, and four TCDM paths.
+``fc_subsystem`` does not instantiate ``fc_hwpe`` and ties off the event and
+four TCDM paths. An access to the HWPE APB window then completes at once with
+an error response and zero read data.
 
 The current HERIS address window is ``0x1A10_C000`` through ``0x1A10_CFFF``.
 The definitions are in ``heris-soc/hw/includes/soc_mem_map.svh`` and
@@ -261,14 +265,16 @@ must use addresses visible through the interleaved L2 path.
 Default Enablement
 ~~~~~~~~~~~~~~~~~~
 
-``USE_HWPE`` is enabled by default at these integration points:
+``USE_HWPE`` is zero by default at these integration points:
 
 * ``heris-soc/hw/pulpissimo.sv``
+* ``heris-soc/hw/soc_domain.sv``
 * ``heris-soc/target/sim/tb/tb_pulp_simple.sv``
 * ``heris-soc/target/sim/tb/tb_pulp.sv``
 * ``heris-soc/target/fpga/kcu105/rtl/xilinx_pulpissimo.v``
 
-The KCU105 wrapper sets the parameter explicitly. KC705 remains at zero.
+The KCU105, KC705, and Yehuo wrappers set the parameter explicitly. The smoke
+and full-test scripts also pass ``USE_HWPE=0`` to the simulation build.
 
 Adapter Contract
 ~~~~~~~~~~~~~~~~
@@ -376,11 +382,14 @@ Run the SoC test directly or through the complete regression:
    make test TEST=hwpe_mac_integration REBUILD=1
    make full-test REBUILD=1
 
+These commands need the accelerator enabled and ``hwpe_mac_integration``
+registered again in the test scripts. Neither is the case by default.
+
 The test verifies presence and reset state, acquires both context IDs, runs
 ``simple_mult`` by polling, and runs ``scalar_prod`` with event 140. Its exact
 pass marker is ``HWPE MAC INTEGRATION PASS``.
 
 For server acceptance, use the ordered validation command documented in
-:doc:`/verification/ci-pipeline`. The current 2.1.4 integration has passed this
-gate with Questa and Vivado. Re-run it after an RTL, dependency, target, or
-validation change.
+:doc:`/verification/ci-pipeline`. The 2.1.5 integration passed this gate with
+Questa and Vivado while ``USE_HWPE`` was enabled. Re-run it after an RTL,
+dependency, target, or validation change.
