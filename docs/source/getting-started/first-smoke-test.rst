@@ -31,6 +31,9 @@ The smoke set contains:
 
 * ``hello``
 * ``disabled_blocks``
+* ``probe``
+* ``guard_monitor``
+* ``guard_restart``
 * ``testALU``
 * ``testMUL``
 * ``testMisaligned``
@@ -39,12 +42,12 @@ The smoke set contains:
 * ``bubblesort``
 * ``crc32``
 
-The platform build plus these nine tests produce the expected final summary:
+The platform build plus these twelve tests produce the expected final summary:
 
 .. code-block:: text
 
-   Results: 10 passed, 0 failed
-   SMOKE PASSED
+   Results: 13 passed, 0 failed
+   Smoke result: PASS
 
 Logs are written under ``heris-soc/notes/logs/``.
 
@@ -81,6 +84,13 @@ runtime, software toolchain, QuestaSim model, and selected UART path work
 together for the covered cases. ``disabled_blocks`` shows that the FPU and the
 HWPE accelerator are absent: floating-point instructions trap as illegal, and
 an access to the HWPE window returns zero.
+
+``probe`` accesses the memory and peripheral windows, including unmapped
+addresses, and shows that every access returns. It prints each address before
+the access and fails by timeout if an access hangs. ``guard_monitor``
+and ``guard_restart`` check the SoC guard: the first its watchdog, event
+records, and interrupt, the second four resets by the guard, each followed by
+a restart of the program. See :doc:`/architecture/guard`.
 
 The smoke uses ``fast_debug`` hierarchy preload. It does not prove:
 

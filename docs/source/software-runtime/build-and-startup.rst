@@ -70,6 +70,45 @@ configuration defines software section placement; the SoC datasheet defines
 the physical memory map. Applications should not define ``_start`` or replace
 the vector table unless they also provide the complete initialization path.
 
+Restart Under the Guard
+-----------------------
+
+Set ``CONFIG_GUARD`` in the application Makefile to build the start-up support
+for the SoC guard:
+
+.. code-block:: make
+
+   CONFIG_GUARD = 1
+
+With this option the runtime does the following at every start, before
+``main()``:
+
+* At a first start it keeps a copy of ``.data`` in L2. At every later start it
+  copies ``.data`` back, so a restarted program finds its initial values.
+* At a first start it writes the address of ``_start`` to the guard as the
+  start address of the core. After a reset by the guard the core then starts
+  in the application instead of the boot ROM.
+* It sets three variables, declared in ``guard.h``:
+  ``pos_guard_restarted`` is nonzero when this start follows a reset by the
+  guard; ``pos_guard_cause`` and ``pos_guard_count`` hold ``RESET_CAUSE`` and
+  ``RESET_COUNT`` as found at this start.
+
+A first start is one without a valid start address in the guard, or one after
+the guard has given up.
+
+Zero-initialized data is cleared at every start, with or without the option.
+Only ``.data`` is restored. Data placed in another section, such as
+``.l2_data``, keeps the value it had at the reset. The copy takes the size of
+``.data`` from L2, in front of the heap. State that must survive a reset
+belongs in the four ``SAVE`` words of the guard.
+
+Apply the pad reset before a new program is loaded through JTAG. The pad
+reset clears the start address. Without it the new program is treated as a
+restart and receives the saved ``.data`` of the previous program.
+
+``sw/guard_restart`` is the reference application. The guard is described in
+:doc:`/architecture/guard`.
+
 Simulation Boundary
 -------------------
 

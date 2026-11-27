@@ -34,8 +34,8 @@ The simulation jobs always request a clean platform rebuild:
    make smoke REBUILD=1
    make full-test REBUILD=1
 
-Smoke runs nine CV32E40P software tests. Full-test currently runs the same
-nine tests. Both build the SoC without the FPU and the HWPE accelerator.
+Smoke runs twelve CV32E40P software tests. Full-test currently runs the same
+twelve tests. Both build the SoC without the FPU and the HWPE accelerator.
 
 Each simulation job writes a JUnit report for the GitLab merge request. Test
 failures are collected before the suite fails. Environment or platform build

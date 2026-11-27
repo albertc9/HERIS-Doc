@@ -72,6 +72,27 @@ read-to-clear ``FINISHED`` count.
 The accelerator is not instantiated by default (``USE_HWPE=0``), so this HAL
 applies only to a SoC built with it. See :doc:`/architecture/hwpe-mac`.
 
+SoC Guard
+---------
+
+``include/guard.h`` declares the register offsets of the SoC guard and inline
+helpers: ``guard_read()``, ``guard_write()``, ``guard_write_protected()``,
+``guard_password()``, ``guard_round()``, ``guard_request()``,
+``guard_save_get()``, and ``guard_save_set()``. Any application can use them.
+The interrupt line of the guard is ``GUARD_IRQ``.
+
+The runtime does not feed the watchdog. In service mode, which all current
+targets select, the watchdog starts with the first completed password round.
+An application that never writes a password is not reset by the watchdog. An
+application that uses the watchdog writes the three passwords of each round
+itself.
+
+Build with ``CONFIG_GUARD=1`` to let the program restart by itself after a
+reset by the guard. The start-up behavior is described in
+:doc:`build-and-startup`. The references are ``sw/guard_monitor/test.c`` and
+``sw/guard_restart/test.c``. See :doc:`/architecture/guard` for the guard
+itself.
+
 Current Target
 --------------
 
@@ -83,8 +104,9 @@ Validation
 ----------
 
 ``make smoke`` validates startup and exit, testbench stdout, the absence of the
-FPU and the HWPE accelerator, basic integer execution, misaligned access, the
-UART loopback, and three standalone algorithms. ``make full-test`` currently
+FPU and the HWPE accelerator, the return of bus accesses, the SoC guard and
+the restart under it, basic integer execution, misaligned access, the UART
+loopback, and three standalone algorithms. ``make full-test`` currently
 runs the same tests. The exact smoke list is maintained in
 :doc:`/getting-started/first-smoke-test`.
 
